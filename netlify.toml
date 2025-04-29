@@ -3,7 +3,7 @@
   publish = "."
 
 [build.environment]
-  PYTHON_VERSION = "3.8.0"
+  PYTHON_VERSION = "3.9.0"
   PIP_VERSION = "20.3.4"
   PYTHON_SETUP_PY = "false"
   PYTHON_CONFIGURE_OPTS = "--enable-shared"
