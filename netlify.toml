@@ -3,7 +3,8 @@
   publish = "."
 
 [build.environment]
-  PYTHON_VERSION = "3.11.0"
+  PYTHON_VERSION = "3.10.0"
+  PIP_VERSION = "21.0.1"
 
 [[redirects]]
   from = "/*"
