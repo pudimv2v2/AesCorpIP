@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rastreador de IP</title>
+    <link rel="icon" href="{{ url_for('static', filename='favicon.png') }}" type="image/png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            min-height: 100vh;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 1rem;
+        }
+        .custom-input {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            transition: all 0.3s ease;
+        }
+        .custom-input:focus {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+        }
+        .custom-button {
+            background: linear-gradient(45deg, #ff4d4d, #ff8533);
+            transition: all 0.3s ease;
+        }
+        .custom-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 77, 77, 0.3);
+        }
+        .url-container {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 0.5rem;
+        }
+        .copy-button {
+            background: rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        .copy-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-center p-4">
+    <div class="max-w-md w-full glass-card p-8">
+        <h1 class="text-4xl font-bold text-white mb-8 text-center">
+            Rastreador de IP
+            <span class="text-red-500">Pro</span>
+        </h1>
+
+        <input type="text" id="urlInput" placeholder="Digite o nome do alvo" 
+               class="custom-input w-full p-3 rounded-lg mb-4">
+
+        <button onclick="generateUrl()" 
+                class="custom-button w-full p-3 rounded-lg text-white font-semibold mb-4">
+            Gerar Link de Rastreamento
+        </button>
+
+        <a href="/visitors" 
+           class="block w-full p-3 rounded-lg text-center text-white font-semibold mb-4"
+           style="background: rgba(255, 255, 255, 0.1);">
+            Ver Localizações Rastreadas
+        </a>
+
+        <div id="urlContainer" class="url-container p-4 hidden">
+            <div class="flex justify-between items-center">
+                <span id="generatedUrl" class="text-white break-all"></span>
+                <button class="copy-button px-3 py-1 rounded text-white text-sm" 
+                        onclick="copyUrl()">Copiar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function generateUrl() {
+            const urlInput = document.getElementById('urlInput').value.trim();
+            const baseUrl = window.location.origin + '/track?n=';
+            const generatedUrl = urlInput ? `${baseUrl}${encodeURIComponent(urlInput)}` : '';
+            const urlContainer = document.getElementById('urlContainer');
+            const urlElement = document.getElementById('generatedUrl');
+            
+            if (generatedUrl) {
+                urlElement.textContent = generatedUrl;
+                urlContainer.classList.remove('hidden');
+            } else {
+                urlElement.textContent = 'Por favor, digite um nome.';
+                urlContainer.classList.remove('hidden');
+            }
+        }
+
+        function copyUrl() {
+            const url = document.getElementById('generatedUrl').textContent;
+            
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(url).then(() => {
+                    alert('URL copiada para a área de transferência!');
+                }).catch(err => {
+                    console.error('API de área de transferência falhou:', err);
+                    fallbackCopyUrl(url);
+                });
+            } else {
+                fallbackCopyUrl(url);
+            }
+        }
+
+        function fallbackCopyUrl(url) {
+            try {
+                const tempInput = document.createElement('textarea');
+                tempInput.value = url;
+                tempInput.style.position = 'fixed';
+                tempInput.style.opacity = '0';
+                document.body.appendChild(tempInput);
+                tempInput.select();
+                tempInput.setSelectionRange(0, 99999);
+                document.execCommand('copy');
+                document.body.removeChild(tempInput);
+                alert('URL copiada para a área de transferência!');
+            } catch (err) {
+                console.error('Cópia alternativa falhou:', err);
+                alert('Falha ao copiar URL. Por favor, copie manualmente.');
+            }
+        }
+    </script>
+</body>
+</html> 

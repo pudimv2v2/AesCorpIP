@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rastreamento em Andamento - Rastreador de IP</title>
+    <link rel="icon" href="{{ url_for('static', filename='favicon.png') }}" type="image/png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            min-height: 100vh;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 1rem;
+        }
+        .loading-dots::after {
+            content: '...';
+            animation: loading 1.5s infinite;
+        }
+        @keyframes loading {
+            0% { content: '.'; }
+            33% { content: '..'; }
+            66% { content: '...'; }
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-center p-4">
+    <div class="max-w-md w-full glass-card p-8 text-center">
+        <h1 class="text-3xl font-bold text-white mb-4">
+            Rastreamento em Andamento
+        </h1>
+        <p class="text-gray-300 mb-6">
+            Coletando informações de localização<span class="loading-dots"></span>
+        </p>
+        <div class="text-gray-400 text-sm">
+            Esta página está sendo monitorada. Por favor, mantenha-a aberta.
+        </div>
+    </div>
+</body>
+</html> 
